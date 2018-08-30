@@ -25,20 +25,24 @@ services:
   volumes:
     - ./data:/data/teamcity_server/datadir
     - ./logs:/opt/teamcity/logs
+    - ./buildAgent:/opt/teamcity/buildAgent
   ports:
    - "8111:8111"
   tty: true
 
  teamcity_agent1:
-#  build:
-#   context: ./agent_docker
+  build:
+   context: ./agent-docker
+  depends_on:
+   - "teamcity"
   restart: unless-stopped
-  image: jetbrains/teamcity-minimal-agent:latest
+#  image: jetbrains/teamcity-minimal-agent:latest
   networks:
    - teamcitynet
   links:
    - teamcity:teamcity
   volumes:
+   - ./buildAgent:/buildAgent
    - ./agents/001/conf:/data/teamcity_agent/conf
    - ./agents/001/logs:/opt/buildagent/logs
   environment:
@@ -47,15 +51,18 @@ services:
   tty: true
 
  teamcity_agent2:
-#  build:
-#   context: ./agent_docker
+  build:
+   context: ./agent-docker
+  depends_on:
+   - "teamcity"
   restart: unless-stopped
-  image: jetbrains/teamcity-minimal-agent:latest
+#  image: jetbrains/teamcity-minimal-agent:latest
   networks:
    - teamcitynet
   links:
    - teamcity:teamcity
   volumes:
+   - ./buildAgent:/buildAgent
    - ./agents/002/conf:/data/teamcity_agent/conf
    - ./agents/002/logs:/opt/buildagent/logs
   environment:
@@ -64,15 +71,18 @@ services:
   tty: true
 
  teamcity_agent3:
-#  build:
-#   context: ./agent_docker
+  build:
+   context: ./agent-docker
+  depends_on:
+   - "teamcity"
   restart: unless-stopped
-  image: jetbrains/teamcity-minimal-agent:latest
+#  image: jetbrains/teamcity-minimal-agent:latest
   networks:
    - teamcitynet
   links:
    - teamcity:teamcity
   volumes:
+   - ./buildAgent:/buildAgent
    - ./agents/003/conf:/data/teamcity_agent/conf
    - ./agents/003/logs:/opt/buildagent/logs
   environment:

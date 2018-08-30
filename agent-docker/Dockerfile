@@ -24,7 +24,7 @@ RUN mkdir -p /dist/ \
     && rm -f $TEAMCITY_PACKAGE \
     && cd ..
 
-COPY dist/Teamcity/buildAgent /opt/buildagent
+RUN cp -r /dist/Teamcity/buildAgent /opt/buildagent
 
 RUN rm -rf /dist/
     
