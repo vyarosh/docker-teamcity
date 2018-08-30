@@ -1,0 +1,85 @@
+# To execute this docker-compose yml file use docker-compose -f <file_name> up
+# Add the "-d" flag at the end for deattached execution
+version: '3.5'
+
+services:
+ teamcity_db:
+  image: postgres:latest
+  networks:
+   - teamcitynet
+  volumes:
+   - ./postgresql/data:/var/lib/postgresql/data
+   - ./postgresql:/var/lib/postgresql
+  environment:
+   - POSTGRES_PASSWORD=teamcity
+   - POSTGRES_USER=teamcity
+   - POSTGRES_DB=teamcity
+  ports:
+   - "5432:5432"
+
+ teamcity:
+  restart: unless-stopped
+  image: jetbrains/teamcity-server:latest
+  networks:
+   - teamcitynet
+  volumes:
+    - ./data:/data/teamcity_server/datadir
+    - ./logs:/opt/teamcity/logs
+  ports:
+   - "8111:8111"
+  tty: true
+
+ teamcity_agent1:
+#  build:
+#   context: ./agent_docker
+  restart: unless-stopped
+  image: jetbrains/teamcity-minimal-agent:latest
+  networks:
+   - teamcitynet
+  links:
+   - teamcity:teamcity
+  volumes:
+   - ./agents/001/conf:/data/teamcity_agent/conf
+   - ./agents/001/logs:/opt/buildagent/logs
+  environment:
+   - SERVER_URL=teamcity:8111
+   - AGENT_NAME="tcagent_docker_v1_001"
+  tty: true
+
+ teamcity_agent2:
+#  build:
+#   context: ./agent_docker
+  restart: unless-stopped
+  image: jetbrains/teamcity-minimal-agent:latest
+  networks:
+   - teamcitynet
+  links:
+   - teamcity:teamcity
+  volumes:
+   - ./agents/002/conf:/data/teamcity_agent/conf
+   - ./agents/002/logs:/opt/buildagent/logs
+  environment:
+   - SERVER_URL=teamcity:8111
+   - AGENT_NAME="tcagent_docker_v1_002"
+  tty: true
+
+ teamcity_agent3:
+#  build:
+#   context: ./agent_docker
+  restart: unless-stopped
+  image: jetbrains/teamcity-minimal-agent:latest
+  networks:
+   - teamcitynet
+  links:
+   - teamcity:teamcity
+  volumes:
+   - ./agents/003/conf:/data/teamcity_agent/conf
+   - ./agents/003/logs:/opt/buildagent/logs
+  environment:
+   - SERVER_URL=teamcity:8111
+   - AGENT_NAME="tcagent_docker_v1_003"
+  tty: true
+  
+networks:
+  teamcitynet:
+    driver: bridge
