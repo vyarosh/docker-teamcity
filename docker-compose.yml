@@ -30,11 +30,9 @@ services:
    - "8111:8111"
   tty: true
 
- teamcity_agent1:
+ build-agent:
   build:
    context: ./agent-docker
-  depends_on:
-   - "teamcity"
   restart: unless-stopped
 #  image: jetbrains/teamcity-minimal-agent:latest
   networks:
@@ -50,13 +48,11 @@ services:
    - AGENT_NAME="tcagent_docker_v1_001"
   tty: true
 
- teamcity_agent2:
-  build:
-   context: ./agent-docker
-  depends_on:
-   - "teamcity"
+ build-agent-2:
+  image: docker-teamcity_build-agent:latest
   restart: unless-stopped
-#  image: jetbrains/teamcity-minimal-agent:latest
+  depends_on:
+   - "build-agent"
   networks:
    - teamcitynet
   links:
@@ -70,13 +66,11 @@ services:
    - AGENT_NAME="tcagent_docker_v1_002"
   tty: true
 
- teamcity_agent3:
-  build:
-   context: ./agent-docker
-  depends_on:
-   - "teamcity"
+ build-agent-3:
+  image: docker-teamcity_build-agent:latest
   restart: unless-stopped
-#  image: jetbrains/teamcity-minimal-agent:latest
+  depends_on:
+   - "build-agent"
   networks:
    - teamcitynet
   links:

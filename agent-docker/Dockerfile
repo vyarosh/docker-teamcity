@@ -24,8 +24,7 @@ RUN mkdir -p /dist/ \
     && rm -f $TEAMCITY_PACKAGE \
     && cd ..
 
-RUN cp -r /dist/Teamcity/buildAgent /opt/buildagent
-
+RUN cp -r /dist/TeamCity/buildAgent /opt/buildagent
 RUN rm -rf /dist/
     
 RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
@@ -41,17 +40,9 @@ ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
 RUN curl -SL https://raw.githubusercontent.com/carlossg/docker-maven/f581ea002e5d067deb6213c00a4d217297cad469/jdk-8/mvn-entrypoint.sh --output /usr/local/bin/mvn-entrypoint.sh
 RUN curl -SL https://raw.githubusercontent.com/carlossg/docker-maven/f581ea002e5d067deb6213c00a4d217297cad469/jdk-8/settings-docker.xml --output /usr/share/maven/ref/settings-docker.xml
 
-#wget $TEAMCITY_SERVER/update/buildAgent.zip
-#    unzip -q -d $AGENT_DIR buildAgent.zip
-#    rm buildAgent.zip
-
-
-
-RUN useradd -m buildagent && \
-    chmod +x /run-agent.sh /run-services.sh && sync
+RUN useradd -m buildagent \ 
+    && chmod +x /run-agent.sh /run-services.sh && sync
 
 CMD ["/run-services.sh"]
 
 EXPOSE 9090
-
-ENTRYPOINT ["/usr/local/bin/mvn-entrypoint.sh"]
