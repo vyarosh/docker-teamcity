@@ -35,7 +35,11 @@ RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
   && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
 
 ENV MAVEN_HOME /usr/share/maven
+ENV M2_HOME /usr/share/maven
+ENV M2=$M2_HOME/bin
 ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
+
+RUN export PATH=$M2:$PATH
 
 RUN curl -SL https://raw.githubusercontent.com/carlossg/docker-maven/f581ea002e5d067deb6213c00a4d217297cad469/jdk-8/mvn-entrypoint.sh --output /usr/local/bin/mvn-entrypoint.sh
 RUN curl -SL https://raw.githubusercontent.com/carlossg/docker-maven/f581ea002e5d067deb6213c00a4d217297cad469/jdk-8/settings-docker.xml --output /usr/share/maven/ref/settings-docker.xml
