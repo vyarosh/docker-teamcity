@@ -12,8 +12,8 @@ VOLUME /data/teamcity_agent/conf
 ENV CONFIG_FILE /data/teamcity_agent/conf/buildAgent.properties
 
 RUN apt-get update
-RUN apt-get -y install tar wget
-RUN apt-get -y install git
+RUN apt-get -y install tar wget --allow-unauthenticated
+RUN apt-get -y install git --allow-unauthenticated
 RUN curl -SL https://raw.githubusercontent.com/JetBrains/teamcity-docker-minimal-agent/master/run-agent.sh --output /run-agent.sh
 RUN curl -SL https://raw.githubusercontent.com/JetBrains/teamcity-docker-minimal-agent/master/run-services.sh --output /run-services.sh
 
